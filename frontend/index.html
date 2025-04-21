@@ -1,78 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trivia Quiz Bot</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f8f9fa;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Quiz Bot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
 
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+        #chat-container {
+            width: 400px;
+            height: 600px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    h1 {
-      color: #343a40;
-    }
-
-    .info-box {
-      max-width: 600px;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .info-box p {
-      margin: 0;
-      color: #495057;
-    }
-
-    df-messenger {
-      --df-messenger-bot-message: #e2e3e5;
-      --df-messenger-button-titlebar-color: #3b82f6;
-      --df-messenger-chat-background-color: #ffffff;
-      --df-messenger-font-color: black;
-      --df-messenger-send-icon: #3b82f6;
-      --df-messenger-user-message: #3b82f6;
-      position: fixed;
-      bottom: 16px;
-      right: 16px;
-    }
-  </style>
+        df-messenger {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>🎯 Trivia Quiz Bot</h1>
-  </header>
+    <div id="chat-container">
+        <df-messenger
+            intent="WELCOME"
+            chat-title="TriviaQuizBot"
+            agent-id="aaead594-f0de-44ff-81ed-977834b1d592"
+            language-code="en">
+        </df-messenger>
+    </div>
 
-  <div class="info-box">
-    <p>Welcome! I'm your friendly Trivia Quiz Bot 🤖</p>
-    <p>Type <strong>"start quiz"</strong> to begin playing!</p>
-    <p>Answer by typing the option number (e.g., 1, 2, 3, 4).</p>
-  </div>
-
-  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-  <df-messenger
-    intent="WELCOME"
-    chat-title="TriviaQuizBot"
-    agent-id="aaead594-f0de-44ff-81ed-977834b1d592"
-    language-code="en"
-  ></df-messenger>
-
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
 </body>
 </html>
