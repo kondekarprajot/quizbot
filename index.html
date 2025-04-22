@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QuizBot</title>
+</head>
+<body>
+  <h1>QuizBot</h1>
+  <button onclick="startQuiz()">Start Quiz</button>
+  <div id="output"></div>
+
+  <script>
+    const backendURL = "https://quizbot-77er.onrender.com/webhook";
+
+    async function startQuiz() {
+      const response = await fetch(backendURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session: "frontend-user-123",
+          queryResult: {
+            queryText: "start quiz"
+          }
+        })
+      });
+      const data = await response.json();
+      document.getElementById("output").innerText = data.fulfillmentText;
+    }
+  </script>
+</body>
+</html>
