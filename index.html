@@ -3,17 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <title>QuizBot</title>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <style>
+    df-messenger {
+      --df-messenger-bot-message: #e0e0e0;
+      --df-messenger-button-titlebar-color: #007bff;
+      --df-messenger-chat-background-color: #fafafa;
+      --df-messenger-font-color: black;
+      --df-messenger-send-icon: #007bff;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+    }
+  </style>
 </head>
 <body>
   <h1>QuizBot</h1>
   <button onclick="startQuiz()">Start Quiz</button>
   <div id="output"></div>
 
+  <!-- ✅ Embed Dialogflow Messenger bot here -->
+  <df-messenger
+    intent="WELCOME"
+    chat-title="QuizBot"
+    agent-id="aaead594-f0de-44ff-81ed-977834b1d592"
+    language-code="en"
+  ></df-messenger>
+
   <script>
     const backendURL = "https://quizbot-77er.onrender.com/webhook";
 
     async function startQuiz() {
-      const sessionID = "frontend-user-" + Date.now();  // Dynamically generate a session ID based on timestamp
+      const sessionID = "frontend-user-" + Date.now();
       const response = await fetch(backendURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -24,11 +45,6 @@
           }
         })
       });
-
-      if (!response.ok) {
-        document.getElementById("output").innerText = "Error starting quiz. Please try again later.";
-        return;
-      }
 
       const data = await response.json();
       document.getElementById("output").innerText = data.fulfillmentText;
