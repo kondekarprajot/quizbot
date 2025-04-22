@@ -1,11 +1,9 @@
-from flask import Flask, request, jsonify, send_from_directory
+import os
+from flask import Flask, request, jsonify
 import requests
 from flask_cors import CORS
-import os
-from random import shuffle
 
-# Configure Flask to serve index.html from frontend folder
-app = Flask(__name__, static_folder="../frontend")
+app = Flask(__name__)
 CORS(app)
 
 # Store the current question and answer for each session
@@ -23,17 +21,14 @@ def fetch_question():
     correct = data['correct_answer']
     options = data['incorrect_answers']
     options.append(correct)
+    from random import shuffle
     shuffle(options)
-
+    
     formatted_question = f"{question} " + " ".join([f"{i+1}. {opt}" for i, opt in enumerate(options)])
     correct_index = options.index(correct) + 1
 
     return formatted_question, correct, correct_index
 
-# ✅ Serve index.html for frontend display
-@app.route('/')
-def serve_index():
-    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -46,7 +41,8 @@ def webhook():
         question, correct_answer, correct_index = fetch_question()
         if not question:
             return jsonify({'fulfillmentText': "Sorry, I couldn't fetch a question right now."})
-
+        
+        # Store correct answer by session
         sessions[session_id] = {
             "correct_answer": correct_answer,
             "correct_index": correct_index
@@ -58,7 +54,7 @@ def webhook():
     elif query in ['1', '2', '3', '4']:
         if session_id not in sessions:
             return jsonify({'fulfillmentText': "Please start the quiz first by saying 'start quiz'."})
-
+        
         user_answer = int(query)
         correct = sessions[session_id]["correct_index"]
         correct_text = sessions[session_id]["correct_answer"]
@@ -68,10 +64,13 @@ def webhook():
         else:
             reply = f"❌ Oops! The correct answer was: {correct_text}. Say 'start quiz' to try again."
 
+        # Clear session
         del sessions[session_id]
         return jsonify({'fulfillmentText': reply})
 
+    # Catch-all for other inputs
     return jsonify({'fulfillmentText': "Please enter a valid option number (1-4) or say 'start quiz' to begin."})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Get the port from the environment or default to 5000
+    app.run(host="0.0.0.0", port=port, debug=True)
