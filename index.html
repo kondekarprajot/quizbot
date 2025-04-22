@@ -13,16 +13,23 @@
     const backendURL = "https://quizbot-77er.onrender.com/webhook";
 
     async function startQuiz() {
+      const sessionID = "frontend-user-" + Date.now();  // Dynamically generate a session ID based on timestamp
       const response = await fetch(backendURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          session: "frontend-user-123",
+          session: sessionID,
           queryResult: {
             queryText: "start quiz"
           }
         })
       });
+
+      if (!response.ok) {
+        document.getElementById("output").innerText = "Error starting quiz. Please try again later.";
+        return;
+      }
+
       const data = await response.json();
       document.getElementById("output").innerText = data.fulfillmentText;
     }
