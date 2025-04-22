@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import requests
 from flask_cors import CORS
 
@@ -29,6 +29,10 @@ def fetch_question():
 
     return formatted_question, correct, correct_index
 
+# Serve the index.html file from the current directory
+@app.route('/')
+def home():
+    return send_from_directory(os.getcwd(), 'index.html')
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
