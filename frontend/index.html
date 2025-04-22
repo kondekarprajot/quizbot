@@ -1,46 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivia Quiz Bot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
-
-        #chat-container {
-            width: 400px;
-            height: 600px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        df-messenger {
-            flex-grow: 1;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>QuizBot</title>
 </head>
 <body>
+  <h1>QuizBot</h1>
+  <button onclick="startQuiz()">Start Quiz</button>
+  <div id="output"></div>
 
-    <div id="chat-container">
-        <df-messenger
-            intent="WELCOME"
-            chat-title="TriviaQuizBot"
-            agent-id="aaead594-f0de-44ff-81ed-977834b1d592"
-            language-code="en">
-        </df-messenger>
-    </div>
+  <script>
+    const backendURL = "https://quizbot-77er.onrender.com/webhook";
 
-    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    async function startQuiz() {
+      const response = await fetch(backendURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session: "frontend-user-123",
+          queryResult: {
+            queryText: "start quiz"
+          }
+        })
+      });
+      const data = await response.json();
+      document.getElementById("output").innerText = data.fulfillmentText;
+    }
+  </script>
 </body>
 </html>
